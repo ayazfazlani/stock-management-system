@@ -3,7 +3,7 @@
         <!-- Logo -->
         <div class="flex h-10 w-40 items-center space-x-3">
             <a wire:navigate href="/">
-                <img src="{{ asset('logo.png') }}" alt="Logo" class="h-13">
+                <!-- <img src="{{ asset('logo.png') }}" alt="Logo" class="h-13"> -->
             </a>
         </div>
 
@@ -16,7 +16,8 @@
                         <i class="fas fa-bell text-xl"></i>
                     </button>
                     <!-- Notification Dropdown -->
-                    <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10">
+                    <div id="notificationDropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10">
                         <!-- Add notification items here -->
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Notification 1</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Notification 2</a>
@@ -33,13 +34,17 @@
                 <!-- User Profile -->
                 <div class="relative">
                     <button id="userButton" class="flex items-center focus:outline-none space-x-2">
-                        <img src="https://th.bing.com/th/id/OIP.x7X2oAehk5M9IvGwO_K0PgHaHa?rs=1&pid=ImgDetMain" alt="User Image" class="w-10 h-10 rounded-full border border-gray-300">
+                        <img src="https://th.bing.com/th/id/OIP.x7X2oAehk5M9IvGwO_K0PgHaHa?rs=1&pid=ImgDetMain"
+                            alt="User Image" class="w-10 h-10 rounded-full border border-gray-300">
                         <span class="hidden md:block text-gray-700">{{ Auth::user()->name ?? 'John Doe' }}</span>
                     </button>
                     <!-- User Dropdown -->
-                    <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10">
-                        <a wire:navigate href="{{ route('admin') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Admin</a>
-                        <a wire:navigate href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                    <div id="userDropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-10">
+                        <a wire:navigate href="{{ route('admin') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Admin</a>
+                        <a wire:navigate href="{{ route('logout') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
                     </div>
                 </div>
             @endauth

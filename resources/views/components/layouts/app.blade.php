@@ -34,8 +34,7 @@
 
     {{--
     <link href="/dist/tailwind.css" rel="stylesheet" /> --}}
-    {{--
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="apple-touch-icon" sizes="16x16" href="/pwa/icons/ios/16.png">
     <link rel="apple-touch-icon" sizes="20x20" href="/pwa/icons/ios/20.png">

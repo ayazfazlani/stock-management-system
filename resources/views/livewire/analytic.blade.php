@@ -1,101 +1,132 @@
-<div class="flex flex-1 z-0 flex-col min-h-screen max-w-screen overflow-x-auto bg text-gray-700">
-    <div class="p-6 flex justify-between bg-white w-full">
-        <h1 class="text-2xl font-semibold">Analytics</h1>
-       
-            <button wire:click="exportExcel" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">Export Excel 
+<div class="flex flex-col min-h-screen bg-gray-50 text-gray-700">
+    <!-- Header -->
+    <div class="p-6 flex justify-between items-center bg-white border-b shadow-sm">
+        <h1 class="text-2xl font-semibold text-gray-800">Analytics</h1>
+        <button wire:click="exportExcel"
+            class="bg-green-600 text-white py-2 px-5 rounded-lg hover:bg-green-700 transition font-medium">
+            Export to Excel
+        </button>
     </div>
 
-    <div class="flex flex-grow flex-col p-4 gap-6">
-        <!-- Export Button (Above Filter Section) -->
-        {{-- <div class="flex justify-end mb-4">
-            <button wire:click="exportExcel" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">Export to Excel</button>
-        </div> --}}
-
+    <!-- Main content area -->
+    <div class="flex-grow p-4 md:p-6 space-y-6">
         <!-- Filter Section -->
-        <div class="w-full bg-white px-4 rounded-lg max-sm:flex-wrap">
-            <h3 class="text-lg font-semibold mb-4">Filter</h3>
-            <div class="flex w-full gap-2">
-                <div class="flex w-full md:flex-1 items-center gap-2">
-                    <input type="text" wire:model.live="filterName" id="item_name" 
-                           class="flex-1 p-2 border rounded-lg" 
-                           placeholder="Enter item name" />
+        <div class="bg-white p-5 rounded-xl shadow-sm">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Filter</h3>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1">
+                    <input type="text" wire:model.live="filterName" id="item_name"
+                        class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        placeholder="Search by item name..." />
                 </div>
-                <div class="md:flex-1">
-                    {{-- <button wire:click="fetchData" 
-                    class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
-                Filter
-            </button> --}}
-                </div>
+                <!-- You can re-enable this if needed -->
+                <!--
+                <button 
+                    wire:click="fetchData"
+                    class="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition"
+                >
+                    Apply Filter
+                </button>
+                -->
             </div>
         </div>
-        
 
-        <!-- Main Table Section -->
-        <div class="bg-white p-4 rounded-lg  overflow-x-auto max-h-[400px] overflow-y-auto">
-            <h3 class="text-lg font-semibold mb-4">Item Analytics</h3>
-            <div class="flex overflow-hidden">
-                <!-- Left Section: Item Info -->
-                <div class="w-1/4 hidden md:block bg-gray-50 flex-none">
-                    <table class="min-w-full bg-white border rounded-lg table-auto">
-                        <thead>
-                            <tr class="bg-gray-200">
-                                <th class="h-[48px] text-sm">Item Name</th>
+        <!-- Analytics Table Section -->
+        <div class="bg-white p-5 rounded-xl shadow-sm flex flex-col max-h-[520px] overflow-hidden">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Item Analytics</h3>
+
+            <div class="flex min-w-0 flex-grow overflow-hidden">
+                <!-- Left fixed column - Item Names (visible on md+) -->
+                <div class="hidden md:block w-80 flex-none bg-gray-50 border-r overflow-y-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100 sticky top-0 z-10">
+                            <tr>
+                                <th class="px-2 py-6 text-left text-sm font-semibold text-gray-700 md:min-w-[180px]">
+                                    Item Name</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {{-- @foreach (json_decode($itemsDataJson, true) as $item) --}}
+                        <tbody class="divide-y divide-gray-200 bg-white">
                             @foreach (json_decode($filteredAnalyticsDataJson, true) as $data)
-                                <tr class="pr-3 border-b hover:bg-gray-50">
-                                    <td class="h-[48px] p-3  text-sm">{{ $data['item_name'] }}</td>
-                                </tr>
+                            <tr>
+                                <td class="h-12 px-4 text-sm text-gray-600">{{ $data['item_name'] }}</td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Right Section: Analytics Table -->
-                <div class="flex-1 overflow-x-auto">
-                    <table class="min-w-full bg-white border rounded-lg table-auto">
-                        <thead>
-                            <tr class="bg-gray-200">
-                                <th class="p-3 md:min-w-[200px]">Item</th>
-                                <th class="p-3 md:min-w-[200px]">Current Quantity</th>
-                                <th class="p-3 md:min-w-[200px]">Inventory Assets</th>
-                                <th class="p-3 md:md:min-w-[200px]">Average Quantity</th>
-                                <th class="p-3 md:min-w-[200px]">Turnover Ratio</th>
-                                <th class="p-3 md:min-w-[200px]">Stock Out Days</th>
-                                <th class="p-3 md:min-w-[200px]">Total Stock in</th>
-                                <th class="p-3 md:min-w-[200px]">Total Stock Out</th>
-                                <th class="p-3 md:min-w-[200px]">Avg Daily Stock In</th>
-                                <th class="p-3 md:min-w-[200px]">Avg Daily Stock Out</th>
+                <!-- Scrollable main analytics table -->
+                <div class="flex-1 overflow-x-auto overflow-y-auto">
+                    <table class="min-w-max divide-y divide-gray-200">
+                        <thead class="bg-gray-100 sticky top-0 z-10">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 md:min-w-[180px]">
+                                    Item</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[140px]">
+                                    Current Qty</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[160px]">
+                                    Inventory Assets</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[140px]">
+                                    Avg Quantity</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[140px]">
+                                    Turnover Ratio</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[140px]">
+                                    Stock Out Days</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[140px]">
+                                    Total In</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[140px]">
+                                    Total Out</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[150px]">
+                                    Avg Daily In</th>
+                                <th class="px-4 py-3 text-right text-sm font-semibold text-gray-700 md:min-w-[150px]">
+                                    Avg Daily Out</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-gray-200 bg-white">
                             @foreach (json_decode($filteredAnalyticsDataJson, true) as $data)
-                                <tr class="border-b hover:bg-gray-50">
-                                    <td class="p-3">{{ $data['item_name'] }}</td>
-                                    <td class="p-3">{{ $data['current_quantity'] }}</td>
-                                    <td class="p-3">${{ number_format($data['inventory_assets'], 2) }}</td>
-                                    <td class="p-3">{{ $data['average_quantity'] }}</td>
-                                    <td class="p-3">{{ $data['turnover_ratio'] }}</td>
-                                    <td class="p-3">{{ $data['stock_out_days_estimate'] }}</td>
-                                    <td class="p-3">{{ $data['total_stock_in'] }}</td>
-                                    <td class="p-3">{{ $data['total_stock_out'] }}</td>
-                                    <td class="p-3">{{ $data['avg_daily_stock_in'] }}</td>
-                                    <td class="p-3">{{ $data['avg_daily_stock_out'] }}</td>
-                                </tr>
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-4 py-3 text-sm text-gray-600 md:hidden">{{ $data['item_name'] }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-600 hidden md:table-cell">
+                                    {{ $data['item_name'] }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">{{ $data['current_quantity'] }}
+                                </td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">
+                                    ${{ number_format($data['inventory_assets'] ?? 0, 2) }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">
+                                    {{ number_format($data['average_quantity'] ?? 0, 1) }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">
+                                    {{ number_format($data['turnover_ratio'] ?? 0, 2) }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">
+                                    {{ $data['stock_out_days_estimate'] ?? '—' }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">
+                                    {{ $data['total_stock_in'] ?? 0 }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">
+                                    {{ $data['total_stock_out'] ?? 0 }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">
+                                    {{ number_format($data['avg_daily_stock_in'] ?? 0, 1) }}</td>
+                                <td class="px-4 py-3 text-right text-sm text-gray-600">
+                                    {{ number_format($data['avg_daily_stock_out'] ?? 0, 1) }}</td>
+                            </tr>
                             @endforeach
-                            <tr class="bg-gray-200">
-                                <td class="p-3 font-semibold">Total</td>
-                                <td class="p-3">{{ $this->calculate('current_quantity') }}</td>
-                                <td class="p-3">{{ $this->calculate('inventory_assets') }}</td>
-                                <td class="p-3">{{ $this->calculate('average_quantity') }}</td>
-                                <td class="p-3">{{ $this->calculate('turnover_ratio') }}</td>
-                                <td class="p-3">{{ $this->calculate('stock_out_days_estimate') }}</td>
-                                <td class="p-3">{{ $this->calculate('total_stock_in') }}</td>
-                                <td class="p-3">{{ $this->calculate('total_stock_out') }}</td>
-                                <td class="p-3">{{ $this->calculate('avg_daily_stock_in') }}</td>
-                                <td class="p-3">{{ $this->calculate('avg_daily_stock_out') }}</td>
+
+                            <!-- Totals row -->
+                            <tr class="bg-gray-100 font-medium">
+                                <td class="px-4 py-3 text-sm">Total</td>
+                                <td class="px-4 py-3 text-right text-sm">{{ $this->calculate('current_quantity') }}</td>
+                                <td class="px-4 py-3 text-right text-sm">
+                                    ${{ number_format($this->calculate('inventory_assets'), 2) }}</td>
+                                <td class="px-4 py-3 text-right text-sm">
+                                    {{ number_format($this->calculate('average_quantity'), 1) }}</td>
+                                <td class="px-4 py-3 text-right text-sm">
+                                    {{ number_format($this->calculate('turnover_ratio'), 2) }}</td>
+                                <td class="px-4 py-3 text-right text-sm">
+                                    {{ $this->calculate('stock_out_days_estimate') }}</td>
+                                <td class="px-4 py-3 text-right text-sm">{{ $this->calculate('total_stock_in') }}</td>
+                                <td class="px-4 py-3 text-right text-sm">{{ $this->calculate('total_stock_out') }}</td>
+                                <td class="px-4 py-3 text-right text-sm">
+                                    {{ number_format($this->calculate('avg_daily_stock_in'), 1) }}</td>
+                                <td class="px-4 py-3 text-right text-sm">
+                                    {{ number_format($this->calculate('avg_daily_stock_out'), 1) }}</td>
                             </tr>
                         </tbody>
                     </table>
